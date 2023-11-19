@@ -28,7 +28,7 @@ class ModeratorCommand extends PixelCommand {
         else message.client.database.collection('moderators')
             .deleteOne({ userID: user });
 
-        fetch(`${message.client.config.api_domian}/moderators/${user}/edit`, {
+        fetch(`${message.client.config.api_domain}/moderators/${user}/edit`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

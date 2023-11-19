@@ -15,7 +15,7 @@ class BansManager extends BaseManager {
 
                 if(ban.timeout <= Date.now()) {
                     this.delete(ban);
-                    fetch(`${this.client.config.api_domian}/bans/${user}/edit`, {
+                    fetch(`${this.client.config.api_domain}/bans/${user}/edit`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
