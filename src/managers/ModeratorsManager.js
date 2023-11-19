@@ -1,5 +1,4 @@
 const BaseManager = require('../structures/BaseManager');
-//const fetch = require('node-fetch');
 
 class ModeratorsManager extends BaseManager {
     constructor(client) {

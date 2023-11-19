@@ -2,7 +2,6 @@ const PixelCommand = require('../structures/PixelCommand');
 const BansManager = require('../managers/BansManager');
 const { EmbedBuilder } = require('discord.js');
 const { ms } = require('../utils/PixelFunctions');
-const { generateToken } = require('../extra/Utils');
 const fetch = require('node-fetch');
 
 class TokenCommand extends PixelCommand {
@@ -108,13 +107,13 @@ class TokenCommand extends PixelCommand {
                 if(!user) 
                     { message.reply({ content: `Укажите игрока для проведения регенерации токена` }); break; };
 
-                const data = await message.client.database.collection('users').findOne({ userID: user.id });
+                const data = await message.client.database.collection('users').findOne({ userID: user.id }, { projection: { _id: 0, token: 1 } });
                 if(!data) { message.reply({ content: `Не найдено записи о данном игроке в базе данных` }); break; };
 
                 message.client.database.collection('users').updateOne({ userID: user.id },
                     {
                         $set: {
-                            token: generateToken(), 
+                            token: message.client.functions.generateToken(parseInt(data.token.split('.')[1], 36)), 
                         }
                     }
                 );

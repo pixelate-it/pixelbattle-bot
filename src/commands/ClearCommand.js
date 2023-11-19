@@ -1,5 +1,4 @@
 const PixelCommand = require('../structures/PixelCommand');
-const { defaultGame } = require('../../settings.json');
 const hexRegExp = /^#[0-9A-F]{6}$/i;
 
 class ClearCommand extends PixelCommand {
