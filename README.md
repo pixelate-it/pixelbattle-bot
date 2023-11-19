@@ -19,7 +19,7 @@
     "prefix": "p!"
 }
 ```
-where:
+where:  
 `database` - mongodb url connection string  
 `token` - Discord bot token, get [here (DDevs)](https://discord.com/developers/applications)  
 `insideToken` - token used for communication between the bot and the API  
