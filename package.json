@@ -1,6 +1,6 @@
 {
   "name": "pixelbattle-bot",
-  "version": "3.0.1 (Red Lori)",
+  "version": "3.1.0 (Green Amazon)",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -10,14 +10,7 @@
   "author": "mirdukkkkk",
   "license": "LGPL-3.0-only",
   "dependencies": {
-    "@fastify/cors": "^8.4.0",
-    "@fastify/formbody": "^7.4.0",
-    "@fastify/rate-limit": "^8.0.3",
-    "@fastify/under-pressure": "^8.3.0",
-    "@fastify/websocket": "^8.2.0",
-    "@wokwi/bmp-ts": "^3.0.0",
     "discord.js": "^14.14.1",
-    "fastify": "^4.24.3",
     "mongodb": "^6.2.0",
     "node-fetch": "2.6.1",
     "uuid": "^9.0.1"
