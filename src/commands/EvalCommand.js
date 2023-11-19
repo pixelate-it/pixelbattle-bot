@@ -28,10 +28,10 @@ class EvalCommand extends PixelCommand {
             const after = process.hrtime.bigint();
             if(typeof executed !== 'string') executed = util.inspect(executed, { depth: 0, maxArrayLength: null });
             if(executed.length >= 1500) {
-                let _i = 
-                executed.cut(1500).map(async(string) => await
+                let _i = 0;
+                return executed.match(/.{1,1960}(\n|$)/gs).map(async(string) => await
                     (
-                        _i 
+                        _i++
                         ? message.channel.send({ content: Discord.codeBlock('js', string) }) 
                         : message.reply({ content: Discord.codeBlock('js', string) })
                     )
