@@ -22,7 +22,7 @@ class PixelClient extends Client {
     }
 
     get database() {
-        return this.mongo.db('pixelbattledev');
+        return this.mongo.db('pixelbattle');
     }
 
     async _launch() {
