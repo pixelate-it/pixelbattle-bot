@@ -20,9 +20,9 @@
 }
 ```
 where:
-`database` - mongodb url connection string
-`token` - Discord bot token, get [here (DDevs)](https://discord.com/developers/applications)
-`insideToken` - token used for communication between the bot and the API
-`api_domain` - API domain with protocol
-`owner` - array with discord account IDs, used for special commands
-`prefix` - prefix used by the bot
+`database` - mongodb url connection string  
+`token` - Discord bot token, get [here (DDevs)](https://discord.com/developers/applications)  
+`insideToken` - token used for communication between the bot and the API  
+`api_domain` - API domain with protocol  
+`owner` - array with discord account IDs, used for special commands  
+`prefix` - prefix used by the bot  
