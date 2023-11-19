@@ -46,7 +46,7 @@ class TokenCommand extends PixelCommand {
 
                 const msg = await message.reply({ content: 'Производятся записи в базе данных и сервере Pixel Battle...' });
 
-                fetch(`${message.client.config.api_domian}/bans/${user.id}/edit`, {
+                fetch(`${message.client.config.api_domain}/bans/${user.id}/edit`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
