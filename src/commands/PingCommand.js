@@ -1,6 +1,6 @@
 const PixelCommand = require('../structures/PixelCommand');
 const { EmbedBuilder, version } = require('discord.js');
-const { version: gamever, dependencies } = require('../../package.json');
+const { version: gamever } = require('../../package.json');
 
 class PingCommand extends PixelCommand {
     constructor() {

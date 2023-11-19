@@ -10,7 +10,7 @@ class PixelClient extends Client {
         super(options);
         this.config = require('../../settings.json');
         this.functions = require('../utils/PixelFunctions');
-        this.constants = require('../extra/Constants');
+        this.constants = require('../utils/PixelConstants');
 
         this.mongo = new MongoClient(this.config.database);
 
