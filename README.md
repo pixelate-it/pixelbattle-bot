@@ -1,1 +1,2 @@
 # PixelBattle Bot
+start
