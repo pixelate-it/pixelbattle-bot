@@ -37,7 +37,7 @@ class UserCommand extends PixelCommand {
                     {
                         name: '🛠️ Внутреняя информация',
                         value: 
-                            `> Последняя генерация токена: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[1], 36) / 1000)}>`}\n` +
+                            `> Первая авторизация: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[1], 36) / 1000)}>`}\n` +
                             `> Блокировка: ${banned ? `✅ (действует до: <t:${Math.floor(banned.timeout / 1000)}>)` : '❌'}\n` +
                             `> Модератор?: ${message.client.moderators.has(member.id) ? '✅' : '❌'}\n` +
                             `> Значки: ${message.client.functions.buildBadges(information?.badges ?? []) ?? '**отсутствуют**'}\n` +
