@@ -25,7 +25,7 @@ class PingCommand extends PixelCommand {
                     `> Версия Discord.JS: \`${version}\`\n` +
                     `> Версия игры: \`${gamever}\``
                 )
-                .setFooter({ text: `https://${message.client.config.main_domian}/`, iconURL: 'https://i.imgur.com/dgxDCnZ.png' })
+                .setFooter({ text: `https://${message.client.config.main_domain}/`, iconURL: 'https://i.imgur.com/dgxDCnZ.png' })
                 .setTimestamp()
             ],
             content: null
