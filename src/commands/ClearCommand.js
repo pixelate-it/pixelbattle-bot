@@ -27,7 +27,7 @@ class ClearCommand extends PixelCommand {
         await message.client.database.collection('pixels')
         .insertMany(
             new Array(data.canvas.width * data.canvas.height).fill(0)
-            .map((_, i) => ({ x: i % data.canvas.width, y: Math.floor(i / process.env.width), color: hex, author: null, tag: null })),
+            .map((_, i) => ({ x: i % data.canvas.width, y: Math.floor(i / data.canvas.width), color: hex, author: null, tag: null })),
             { ordered: true }
         );
 
