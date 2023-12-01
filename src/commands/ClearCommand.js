@@ -1,4 +1,5 @@
 const PixelCommand = require('../structures/PixelCommand');
+const fetch = require("node-fetch");
 const hexRegExp = /^#[0-9A-F]{6}$/i;
 
 class ClearCommand extends PixelCommand {
@@ -18,7 +19,7 @@ class ClearCommand extends PixelCommand {
 
         const msg = await message.reply({ content: `Производится очистка холста...` });
 
-        const data = await fetch(`${message.client.config.api_domain}/game/change`, {
+        const data = await fetch(`${message.client.config.api_domain}/pixels/clear`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
