@@ -33,7 +33,7 @@ class ModeratorCommand extends PixelCommand {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 token: message.client.config.insideToken,
-                action: action 
+                action
             })
         });
 
