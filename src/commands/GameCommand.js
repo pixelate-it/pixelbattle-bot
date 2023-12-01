@@ -14,8 +14,22 @@ class GameCommand extends PixelCommand {
             return message.reply({ content: 'Вы не являетесь создателем проекта/специальным модератором, доступ к команде ограничен' });
 
         if(isNaN(Number(args[0]))) {
-            if(!(['start', 'stop'].includes(args[0])))
-                return message.reply({ content: `Используйте только start/stop` });
+            if(!(['start', 'stop'].includes(args[0]))) {
+                const name = args.join(' ');
+                if(name.length > 32)
+                    return message.reply({ content: `Имя игры не может быть больше 32 символов` });
+
+                fetch(`${message.client.config.api_domain}/game/change`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        token: message.client.config.insideToken,
+                        name
+                    })
+                });
+
+                return message.reply({ content: `Название игры было изменено` });
+            }
 
             const ended = (args[0] !== 'start');
             fetch(`${message.client.config.api_domain}/game/change`, {
@@ -31,9 +45,9 @@ class GameCommand extends PixelCommand {
         } else {
             const cooldown = Number(args[0]);
             if(cooldown <= 0)
-                return message.reply({ content: `Кулдаун не может нулём и меньше` });
+                return message.reply({ content: 'Кулдаун не может нулём и меньше' });
             if(!Number.isInteger(cooldown))
-                return message.reply({ content: `Кулдаун должен быть целым числом` });
+                return message.reply({ content: 'Кулдаун должен быть целым числом' });
 
             fetch(`${message.client.config.api_domain}/game/change`, {
                 method: 'POST',
@@ -44,7 +58,7 @@ class GameCommand extends PixelCommand {
                 })
             });
 
-            return message.reply({ content: `Как кулдаун игры было установлено значение в ${cooldown}ms` });
+            return message.reply({ content: `Как кулдаун игры было установлено значение в \`${cooldown}ms\`` });
         }
     }
 }
