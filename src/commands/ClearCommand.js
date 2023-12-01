@@ -26,9 +26,9 @@ class ClearCommand extends PixelCommand {
                 token: message.client.config.insideToken,
                 color
             })
-        }).then(async(res) => await res.json());
+        }).then(async res => await res.json());
 
-        if(data?.error ?? !data) return msg.edit({ content: 'API PixelBattle недоступно в данный момент, регенерация холста не возможна' })
+        if(data?.error ?? !data) return msg.edit({ content: 'API PixelBattle недоступно в данный момент, регенерация холста не возможна' });
 
         return msg.edit({ content: `Холст ${data.canvas.width}x${data.canvas.height} был успешно очищен! Как его цвет был установлен - \`${color}\`` });
     }
