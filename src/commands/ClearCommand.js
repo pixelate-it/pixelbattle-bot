@@ -18,7 +18,7 @@ class ClearCommand extends PixelCommand {
 
         const msg = await message.reply({ content: `Производится очистка холста...` });
 
-        const data = await fetch(`${message.client.config.api_domain}/info`, { method: 'GET' })
+        const data = await fetch(`${message.client.config.api_domain}/game`, { method: 'GET' })
             .then(res => res.json());
 
         if(data?.error ?? !data) return msg.edit({ content: 'API PixelBattle недоступно в данный момент, регенерация холста не возможна' })
