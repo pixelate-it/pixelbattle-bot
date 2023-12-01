@@ -11,7 +11,7 @@ class BaninfoCommand extends PixelCommand {
     }
 
     async run(message, args) {
-        if(args.length = 0) 
+        if(args.length === 0)
             return message.reply({ content: 'Укажите ID или упомяните игрока, для просмотра его бана' })
         const user = message.mentions.users.first() || message.client.users.cache.get(args[0]) || await message.client.users.fetch(args[0]).catch(() => {});
         if(!user) 
