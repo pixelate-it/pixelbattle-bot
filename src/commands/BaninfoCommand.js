@@ -23,13 +23,13 @@ class BaninfoCommand extends PixelCommand {
         const ban = await manager.find({ userID: user.id });
         if(!ban) 
             return msg.edit({ content: 'Указанный вами игрок не находится в бане' });
-        const moderator = message.client.users.cache.get(args[0]) || await message.client.users.fetch(ban.moderatorID).catch(() => {});
+        const moderator = message.client.users.cache.get(ban.moderatorID) || await message.client.users.fetch(ban.moderatorID).catch(() => {});
 
         return msg.edit({
             content: null,
             embeds: [
                 new EmbedBuilder()
-                .setTitle(`:information_source: Информация о ${user.id == message.author.id ? 'вашем бане' : 'бане другого игрока'}`)
+                .setTitle(`:information_source: Информация о ${user.id === message.author.id ? 'вашем бане' : 'бане другого игрока'}`)
                 .setColor(0x5865F2)
                 .setDescription(
                     `> Модератор: \`${moderator?.globalName || moderator?.username || ban.moderatorID} ${moderator ? `(${ban.moderatorID})` : ''}\`\n` +
