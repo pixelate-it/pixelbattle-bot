@@ -1,6 +1,6 @@
 {
   "name": "pixelbattle-bot",
-  "version": "3.2 (Starry Ara)",
+  "version": "3.3.0 (Sky Lorikeet)",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
