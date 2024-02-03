@@ -24,7 +24,7 @@ class BansManager extends BaseManager {
                         })
                     });
 
-                    user?.send({ content: `Ваш бан по причине \`${ban.reason}\` истёк. Вы снова можете играть на сайте https://pixelbattle.fun/` })
+                    user?.send({ content: `Ваш бан ${!ban.reason ? '' : `по причине \`${ban.reason}\` `}истёк. Вы снова можете играть на сайте https://pixelbattle.fun/` })
                     .catch(() => {})
                 }
             }
