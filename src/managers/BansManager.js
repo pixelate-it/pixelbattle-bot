@@ -19,7 +19,7 @@ class BansManager extends BaseManager {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ 
-                            token: message.client.config.insideToken, 
+                            token: client.config.insideToken, 
                             action: false 
                         })
                     });

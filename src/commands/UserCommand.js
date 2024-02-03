@@ -22,7 +22,7 @@ class UserCommand extends PixelCommand {
             content: null,
             embeds: [
                 new EmbedBuilder()
-                .setTitle((member.id == message.author.id) ? 'Информация о вас' : `Информация о ${member.nickname || member.user.username}`)
+                .setTitle((member.id === message.author.id) ? 'Информация о вас' : `Информация о ${member.nickname || member.user.username}`)
                 .setColor(0x5865F2)
                 .addFields([
                     { 
@@ -37,7 +37,7 @@ class UserCommand extends PixelCommand {
                     {
                         name: '🛠️ Внутреняя информация',
                         value: 
-                            `> Первая авторизация: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[1], 36) / 1000)}>`}\n` +
+                            `> Первая авторизация: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[2], 36) / 1000)}>`}\n` +
                             `> Блокировка: ${banned ? `✅ (действует до: <t:${Math.floor(banned.timeout / 1000)}>)` : '❌'}\n` +
                             `> Модератор?: ${message.client.moderators.has(member.id) ? '✅' : '❌'}\n` +
                             `> Значки: ${message.client.functions.buildBadges(information?.badges ?? []) ?? '**отсутствуют**'}\n` +
