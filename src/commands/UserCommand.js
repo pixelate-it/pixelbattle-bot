@@ -1,6 +1,13 @@
 const PixelCommand = require('../structures/PixelCommand');
 const { EmbedBuilder } = require('discord.js');
 
+function buildRole(id, permissions) {
+    if(permissions.special.includes(id)) return 'специальная';
+    else if(permissions.admin.includes(id)) return 'администратор';
+    else if(permissions.moderator.includes(id)) return 'модератор';
+    else return 'игрок';
+}
+
 class UserCommand extends PixelCommand {
     constructor() {
         super('user', {
@@ -14,9 +21,7 @@ class UserCommand extends PixelCommand {
         const msg = await message.reply({ content: 'Производится сбор данных о игроке...' });
 
         const information = await message.client.database.collection('users')
-            .findOne({ userID: member.id }, { projection: { _id: 0, token: 1, tag: 1, points: 1, badges: 1 } });
-        const banned = await message.client.database.collection('bans')
-            .findOne({ userID: member.id }, { projection: { _id: 0, timeout: 1 } })
+            .findOne({ userID: member.id }, { projection: { _id: 0, token: 1, tag: 1, points: 1, badges: 1, banned: 1 } });
 
         return msg.edit({
             content: null,
@@ -38,10 +43,10 @@ class UserCommand extends PixelCommand {
                         name: '🛠️ Внутреняя информация',
                         value: 
                             `> Первая авторизация: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[2], 36) / 1000)}>`}\n` +
-                            `> Блокировка: ${banned ? `✅ (действует до: <t:${Math.floor(banned.timeout / 1000)}>)` : '❌'}\n` +
-                            `> Модератор?: ${message.client.moderators.has(member.id) ? '✅' : '❌'}\n` +
                             `> Значки: ${message.client.functions.buildBadges(information?.badges ?? []) ?? '**отсутствуют**'}\n` +
                             `> Тег: **${information?.tag || 'отсутствует'}**\n` +
+                            `> Блокировка: ${information.banned ? `✅ (действует до: <t:${Math.floor(information.banned.timeout / 1000)}>)` : '❌'}\n` +
+                            `> Роль: \`${buildRole(member.id, message.client.permissions)}\`\n` +
                             `> Баллы: **${information?.points || 0}**`
                     }
                 ])

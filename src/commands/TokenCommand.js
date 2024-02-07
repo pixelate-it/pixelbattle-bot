@@ -1,5 +1,5 @@
 const PixelCommand = require('../structures/PixelCommand');
-const BansManager = require('../managers/BansManager');
+//const BansManager = require('../managers/BansManager');
 const { EmbedBuilder } = require('discord.js');
 const { ms } = require('../utils/PixelFunctions');
 const fetch = require('node-fetch');

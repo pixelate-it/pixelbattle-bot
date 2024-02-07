@@ -13,7 +13,7 @@ class PointsCommand extends PixelCommand {
         switch(args[0]) {
             case 'edit':
             case 'change': {
-                if(!message.client.config.owner.includes(message.author.id)) 
+                if(!message.client.permissions.special.includes(message.author.id))
                     { message.react('❌'); break; }
 
                 const change = Number(args[1]);
@@ -26,7 +26,7 @@ class PointsCommand extends PixelCommand {
                 if(!target) 
                     { message.reply({ content: 'Указанный вами игрок не был найден' }); break; }
 
-                message.client.points.updatePoints(target.id, change);
+                await message.client.points.updatePoints(target.id, change);
                 message.reply({ content: `Вы успешно изменили на **${change}** баллы участника ${target.nickname || target.user.globalName || target.user.username} (**${target.id}**)` });
                 break;
             }

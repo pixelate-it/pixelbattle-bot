@@ -1,5 +1,5 @@
 const PixelCommand = require('../structures/PixelCommand');
-const BansManager = require('../managers/BansManager');
+//const BansManager = require('../managers/BansManager');
 const { EmbedBuilder } = require('discord.js');
 
 class BaninfoCommand extends PixelCommand {

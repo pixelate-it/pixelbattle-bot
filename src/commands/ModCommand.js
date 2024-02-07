@@ -10,7 +10,8 @@ class ModeratorCommand extends PixelCommand {
     }
 
     async run(message, args) {
-        if(!message.client.config.owner.includes(message.author.id)) 
+        // further development
+        if(!message.client.permissions.special.includes(message.author.id))
             return message.react('❌');
         if(!(['add', 'remove'].includes(args[0]))) 
             return message.reply({ content: `Используйте только add/remove` });
@@ -19,7 +20,7 @@ class ModeratorCommand extends PixelCommand {
         if(!user) 
             return message.reply({ content: 'Укажите участника для проведения действия' });
         const action = (args[0] != 'remove');
-        if(action == message.client.moderators.has(user)) 
+        if(action === message.client.permissions.moderator.includes(user))
             return message.reply({ content: `Указанный вами модератор уже **${action ? 'является' : 'не является'}** модератором` });
 
         message.client.moderators[action ? 'set' : 'delete'](user, { userID: user });

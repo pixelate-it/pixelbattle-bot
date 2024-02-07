@@ -15,7 +15,7 @@ class EvalCommand extends PixelCommand {
         let isAsync = false;
 
         try {
-            if(!message.client.config.owner.includes(message.author.id)) 
+            if(!message.client.permissions.special.includes(message.author.id))
                 return message.react('❌');
             if(!code) 
                 return message.reply({ content: 'Введите код, который необходимо выполнить!' });

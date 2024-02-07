@@ -4,6 +4,7 @@ const PointsHelper = require('../helpers/PointsHelper');
 
 const loadListeners = require('../helpers/loadListeners');
 const loadCommands = require('../helpers/loadCommands');
+const buildPermissions = require('../helpers/buildPermissions');
 
 class PixelClient extends Client {
     constructor(options) {
@@ -19,14 +20,17 @@ class PixelClient extends Client {
         this.moderators = new Collection();
         this.listeners = new Collection();
         this.commands = new Collection();
+
+        this.permissions = {};
     }
 
     get database() {
-        return this.mongo.db('pixelbattle');
+        return this.mongo.db('pixelbattlerewrite');
     }
 
     async _launch() {
         await this.mongo.connect();
+        await buildPermissions(this);
         await loadListeners(this, '../listeners');
         await loadCommands(this, '../commands');
         return this.login(this.config.token).catch(console.error);
