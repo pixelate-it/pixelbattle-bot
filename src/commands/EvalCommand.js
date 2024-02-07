@@ -15,7 +15,7 @@ class EvalCommand extends PixelCommand {
         let isAsync = false;
 
         try {
-            if(!message.client.permissions.special.includes(message.author.id))
+            if(!message.client.permissions.special.has(message.author.id))
                 return message.react('❌');
             if(!code) 
                 return message.reply({ content: 'Введите код, который необходимо выполнить!' });
@@ -37,9 +37,9 @@ class EvalCommand extends PixelCommand {
                     )
                 )
             }
-            message.reply({ content: Discord.codeBlock('js', executed) });
+            return message.reply({ content: Discord.codeBlock('js', executed) });
         } catch(error) {
-            message.reply({ content: Discord.codeBlock('js', error) });
+            return message.reply({ content: Discord.codeBlock('js', error) });
         }
     }
 }

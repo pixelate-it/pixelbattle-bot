@@ -13,7 +13,7 @@ class PointsCommand extends PixelCommand {
         switch(args[0]) {
             case 'edit':
             case 'change': {
-                if(!message.client.permissions.special.includes(message.author.id))
+                if(!message.client.permissions.special.has(message.author.id))
                     { message.react('❌'); break; }
 
                 const change = Number(args[1]);
@@ -35,7 +35,7 @@ class PointsCommand extends PixelCommand {
             case 'leaders':
             case 'leader': {
                 const msg = await message.reply({ content: 'Идёт построение таблицы лидеров...' });
-                let users = await message.client.database.collection('users').find({}, { userID: 1, username: 1, points: 1 }).toArray();
+                let users = await message.client.database.collection('users').find({}, { userID: 1, points: 1 }).toArray();
                 users = users.filter(u => u.points !== 0);
 
                 let i = 1;
@@ -68,7 +68,7 @@ class PointsCommand extends PixelCommand {
                         .setDescription(
                             `> Итоговое количество баллов: \`${data?.points || 0}\``
                         )
-                        .setFooter({ text: message.client.constants.phrases.random() })
+                        .setFooter({ text: 'Система баллов лишь до сих пор готовится, не обожгись :D'/*message.client.constants.phrases.random()*/ })
                         .setTimestamp()
                     ]
                 });

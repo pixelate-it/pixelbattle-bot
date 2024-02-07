@@ -1,5 +1,4 @@
 const PixelCommand = require('../structures/PixelCommand');
-//const BansManager = require('../managers/BansManager');
 const { EmbedBuilder } = require('discord.js');
 
 class BaninfoCommand extends PixelCommand {
@@ -19,11 +18,14 @@ class BaninfoCommand extends PixelCommand {
 
         const msg = await message.reply({ content: 'Поиск данных об игроке...' });
 
-        const manager = new BansManager(message.client);
-        const ban = await manager.find({ userID: user.id });
+        const ban = (await message.client.database.collection('users').findOne(
+            { userID: user.id },
+            { projection: { _id: 0, banned: 1 } }
+        ))?.banned;
         if(!ban) 
             return msg.edit({ content: 'Указанный вами игрок не находится в бане' });
-        const moderator = message.client.users.cache.get(ban.moderatorID) || await message.client.users.fetch(ban.moderatorID).catch(() => {});
+        const moderator = message.client.users.cache.get(ban.moderatorID) || await message.client.users.fetch(ban.moderatorID)
+            .catch(() => {});
 
         return msg.edit({
             content: null,

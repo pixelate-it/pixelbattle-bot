@@ -1,8 +1,10 @@
 {
     "database": "",
+    "dbname": "pixelbattle",
     "token": "",
     "insideToken": "",
     "api_domain": "",
     "owner": [],
-    "prefix": "p!"
+    "prefix": "p!",
+    "SYSTEM_TOKEN": ""
 }

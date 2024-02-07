@@ -13,63 +13,66 @@ class TokenCommand extends PixelCommand {
     }
 
     async run(message, args) {
-        if(!message.client.moderators.has(message.author.id)) 
+        if(!message.client.permissions.moderator.has(message.author.id))
             return message.reply({ content: 'Вы не являетесь модератором чтобы использовать эту команду!' });
 
         switch(args[0]) {
             case 'ban':
             case 'unban': {
-                const manager = new BansManager(message.client);
-                const action = (args[0] == 'unban') ? false : true;
+                const action = (args[0] !== 'unban');
                 const user = message.mentions.users.first() || message.client.users.cache.get(args[action ? 2 : 1]) || await message.client.users.fetch(args[action ? 2 : 1]).catch(() => {});
 
                 if(action) { 
-                    var time = args[1];
-                    if(!ms(time)) 
+                    var timeout = args[1];
+                    if(!ms(timeout))
                         { message.reply({ content: 'Укажите правильную длительность бана, например \`28d\`' }); break; };
-                    if(!ms(time) || ms(time) > ms('2000d') || ms(time) < ms('1s')) 
+                    if(!ms(timeout) || ms(timeout) > ms('2000d') || ms(timeout) < ms('1s'))
                         { message.reply({ content: 'Минимальная длительность бана - 1 секунда, максимальная - 2000 дней' }); break; };
 
-                    time = ms(time);
+                    timeout = ms(timeout) + Date.now();
                 }
 
                 if(!user) 
                     { message.reply({ content: 'Указанный вами игрок не был найден' }); break; };
-                if(message.client.moderators.has(user.id) && (message.author.id !== message.client.config.owner)) 
-                    { message.reply({ content: `Вы не можете проводить это действие с модератором` }); break; };
+                if(message.client.permissions.moderator.has(user.id) && !message.client.permissions.special.has(message.author.id))
+                    { message.reply({ content: `Вы не можете проводить это действие с модератором` }); break; }
 
                 const reason = args.slice(action ? 3 : 2).join(' ') || null;
-                const assumption = await manager.find({ userID: user.id });
+                const assumption = (await message.client.database.collection('users').findOne({ userID: user.id }, { projection: { _id: 0, banned: 1 } }))?.banned;
                 if(action ? assumption : !assumption) 
-                    { message.reply({ content: `Вы не можете ${action ? 'забанить' : 'разбанить'} человека, который уже ${action ? '' : 'не '}в бане` }); break; };
+                    { message.reply({ content: `Вы не можете ${action ? 'забанить' : 'разбанить'} человека, который уже ${action ? '' : 'не '}в бане` }); break; }
 
-                const msg = await message.reply({ content: 'Производятся записи в базе данных и сервере Pixel Battle...' });
+                const msg = await message.reply({ content: 'Производятся записи в базе данных и API Pixel Battle...' });
 
-                fetch(`${message.client.config.api_domain}/bans/${user.id}/edit`, {
+                fetch(`${message.client.config.api_domain}/users/${user.id}/${args[0]}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        token: message.client.config.insideToken, 
-                        action
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
+                            { userID: message.author.id },
+                            { projection: { _id: 0, token: 1 } }
+                        ))?.token
+                    },
+                    body: JSON.stringify({
+                        timeout,
+                        reason
                     })
                 });
 
-                switch(action) {
-                    case true:
-                        await manager.create({
-                            userID: user.id,
-                            moderatorID: message.author.id,
-                            timeout: Date.now() + time,
-                            reason
-                        });
-                        break;
-
-                    case false:
-                        await manager.delete({
-                            userID: user.id
-                        });
-                        break;
-                }
+                await message.client.database.collection('users').updateOne(
+                    {
+                        userID: user.id
+                    },
+                    {
+                        $set: {
+                            banned: action ? {
+                                moderatorID: message.author.id,
+                                timeout,
+                                reason
+                            } : null
+                        }
+                    }
+                )
 
                 msg.edit({
                     content: null,
@@ -81,7 +84,7 @@ class TokenCommand extends PixelCommand {
                             `> Модератор: \`${message.author.globalName || message.author.username} (${message.author.id})\`\n` +
                             `> ${action ? 'Забанил' : 'Разбанил'}: \`${user.globalName || user.username} (${user.id})\`\n` +
                             `> По причине: \`${reason || 'не указана'}\`\n` +
-                            `${action ? `> Бан истекает: <t:${Math.floor((Date.now() + time) / 1000)}>` : ''}`
+                            `${action ? `> Бан истекает: <t:${Math.floor(timeout / 1000)}>` : ''}`
                         )
                         .addFields(
                             [
@@ -101,19 +104,19 @@ class TokenCommand extends PixelCommand {
             case 'regenerate':
             case 'regen':
             case 'r': {
-                if(!message.client.config.owner.includes(message.author.id)) return message.react('❌');
+                if(!message.client.permissions.special.has(message.author.id)) return message.react('❌');
 
                 const user = message.mentions.users.first() || message.client.users.cache.get(args[1]) || await message.client.users.fetch(args[1]).catch(() => {});
                 if(!user) 
                     { message.reply({ content: `Укажите игрока для проведения регенерации токена` }); break; };
 
                 const data = await message.client.database.collection('users').findOne({ userID: user.id }, { projection: { _id: 0, token: 1 } });
-                if(!data) { message.reply({ content: `Не найдено записи о данном игроке в базе данных` }); break; };
+                if(!data) { message.reply({ content: `Не найдено записи о данном игроке в базе данных` }); break; }
 
                 message.client.database.collection('users').updateOne({ userID: user.id },
                     {
                         $set: {
-                            token: message.client.functions.generateToken(parseInt(data.token.split('.')[1], 36)), 
+                            token: message.client.functions.generateToken(parseInt(data.token.split('.')[2], 36)),
                         }
                     }
                 );

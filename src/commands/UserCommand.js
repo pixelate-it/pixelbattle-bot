@@ -1,11 +1,24 @@
 const PixelCommand = require('../structures/PixelCommand');
 const { EmbedBuilder } = require('discord.js');
+const { badges } = require("../utils/PixelConstants");
 
 function buildRole(id, permissions) {
-    if(permissions.special.includes(id)) return 'специальная';
-    else if(permissions.admin.includes(id)) return 'администратор';
-    else if(permissions.moderator.includes(id)) return 'модератор';
+    if(permissions.special.has(id)) return 'специальная';
+    else if(permissions.admin.has(id)) return 'администратор';
+    else if(permissions.moderator.has(id)) return 'модератор';
     else return 'игрок';
+
+    // maybe refactor?
+}
+
+function buildBadges(list = []) {
+    if(!Array.isArray(list)) throw new TypeError('list is not a array');
+
+    let string;
+    string = list.map(x => badges[x]).join(' / ');
+    if(!string) string = null;
+
+    return string;
 }
 
 class UserCommand extends PixelCommand {
@@ -18,6 +31,8 @@ class UserCommand extends PixelCommand {
 
     async run(message, args) {
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
+        if(member.bot) return message.reply({ content: 'Невозможно просмотреть информацию о боте' });
+
         const msg = await message.reply({ content: 'Производится сбор данных о игроке...' });
 
         const information = await message.client.database.collection('users')
@@ -43,9 +58,9 @@ class UserCommand extends PixelCommand {
                         name: '🛠️ Внутреняя информация',
                         value: 
                             `> Первая авторизация: ${!information?.token ? '**не производилась**' : `<t:${Math.ceil(parseInt(information.token.split('.')[2], 36) / 1000)}>`}\n` +
-                            `> Значки: ${message.client.functions.buildBadges(information?.badges ?? []) ?? '**отсутствуют**'}\n` +
+                            `> Значки: ${buildBadges(information?.badges ?? []) ?? '**отсутствуют**'}\n` +
                             `> Тег: **${information?.tag || 'отсутствует'}**\n` +
-                            `> Блокировка: ${information.banned ? `✅ (действует до: <t:${Math.floor(information.banned.timeout / 1000)}>)` : '❌'}\n` +
+                            `> Блокировка: ${information?.banned ? `✅ (действует до: <t:${Math.floor(information.banned.timeout / 1000)}>)` : '❌'}\n` +
                             `> Роль: \`${buildRole(member.id, message.client.permissions)}\`\n` +
                             `> Баллы: **${information?.points || 0}**`
                     }

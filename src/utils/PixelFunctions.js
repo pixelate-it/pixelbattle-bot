@@ -1,19 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
-const { badges } = require('./PixelConstants');
 
 module.exports = {
     generateToken(date = null) {
         return `${(uuidv4() + '.' + uuidv4()).replace(/-/g, '')}.${(date ?? Date.now()).toString(36)}`;
         // на данный момент у токена фиксированная длинна 72 символа!
-    },
-    buildBadges(list = []) {
-        if(!Array.isArray(list)) throw new TypeError('list is not a array');
-
-        let string;
-        string = list.map(x => badges[x]).join(' / ');
-        if(!string) string = null;
-
-        return string;
     },
     ms(val) {
         if(typeof val === 'string' && val.length > 0) {

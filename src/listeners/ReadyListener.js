@@ -1,5 +1,5 @@
 const PixelListener = require('../structures/PixelListener');
-//const BansManager = require('../managers/BansManager');
+const BanRemoverService = require('../services/BanRemoverService');
 
 class ReadyListener extends PixelListener {
     constructor() {
@@ -8,7 +8,7 @@ class ReadyListener extends PixelListener {
 
     async run(client) {
         await client.guilds.cache.get(client.guilds.cache.first().id).members.fetch().then(() => console.log('* [CACHE] The list of players has been updated'));
-        //await new BansManager(client).handle(); # doesn't work because ban is stored in the user
+        await new BanRemoverService(client).runClearance();
 
         client.user.setPresence({ status: 'idle', activities: [{ name: 'pixelbattle.fun' }] });
         console.log('* [ROOT] Bot launched');

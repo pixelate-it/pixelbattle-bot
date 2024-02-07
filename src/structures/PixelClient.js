@@ -17,7 +17,6 @@ class PixelClient extends Client {
 
         this.points = new PointsHelper(this);
 
-        this.moderators = new Collection();
         this.listeners = new Collection();
         this.commands = new Collection();
 
@@ -25,7 +24,7 @@ class PixelClient extends Client {
     }
 
     get database() {
-        return this.mongo.db('pixelbattlerewrite');
+        return this.mongo.db(this.config.dbname);
     }
 
     async _launch() {
