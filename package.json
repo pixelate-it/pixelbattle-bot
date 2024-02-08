@@ -1,6 +1,6 @@
 {
   "name": "pixelbattle-bot",
-  "version": "3.3.0 (Sky Lorikeet)",
+  "version": "4.0.0 (Fractal Budgie)",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "dotenv": "^16.4.1",
     "nodemon": "^3.0.3"
   }
 }

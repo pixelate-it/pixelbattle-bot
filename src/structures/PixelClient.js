@@ -9,11 +9,13 @@ const buildPermissions = require('../helpers/buildPermissions');
 class PixelClient extends Client {
     constructor(options) {
         super(options);
-        this.config = require('../../settings.json');
+        this.config = require('../config');
         this.functions = require('../utils/PixelFunctions');
         this.constants = require('../utils/PixelConstants');
 
-        this.mongo = new MongoClient(this.config.database);
+        this.mongo = new MongoClient(this.config.database, {
+            retryWrites: true
+        });
 
         this.points = new PointsHelper(this);
 
