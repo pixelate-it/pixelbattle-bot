@@ -1,10 +1,11 @@
 {
   "name": "pixelbattle-bot",
-  "version": "3.3.0 (Sky Lorikeet)",
+  "version": "4.0.0 (Fractal Budgie)",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "prod": "node ."
+    "prod": "node .",
+    "dev": "nodemon ."
   },
   "keywords": [],
   "author": "mirdukkkkk",
@@ -12,7 +13,11 @@
   "dependencies": {
     "discord.js": "^14.14.1",
     "mongodb": "^6.2.0",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.7.0",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.1",
+    "nodemon": "^3.0.3"
   }
 }

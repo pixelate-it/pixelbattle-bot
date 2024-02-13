@@ -1,6 +1,7 @@
 const PixelCommand = require('../structures/PixelCommand');
 const fetch = require("node-fetch");
 const hexRegExp = /^#[0-9A-F]{6}$/i;
+const { codeBlock } = require('discord.js');
 
 class ClearCommand extends PixelCommand {
     constructor() {
@@ -11,8 +12,8 @@ class ClearCommand extends PixelCommand {
     }
 
     async run(message, args) {
-        if(![...message.client.config.owner, '578729769898737668'].includes(message.author.id)) 
-            return message.reply({ content: 'Вы не являетесь создателем проекта/специальным модератором, доступ к команде ограничен' });
+        if(!message.client.permissions.admin.has(message.author.id))
+            return message.reply({ content: 'Вы не являетесь создателем проекта/администратором, доступ к команде ограничен' });
         const color = (args[0] ?? '#FFFFFF');
         if(!hexRegExp.test(color))
             return message.reply({ content: 'Введите верный HEX-код' });
@@ -21,15 +22,29 @@ class ClearCommand extends PixelCommand {
 
         const data = await fetch(`${message.client.config.api_domain}/pixels/clear`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
+                    { userID: message.author.id },
+                    { projection: { _id: 0, token: 1 } }
+                ))?.token
+            },
             body: JSON.stringify({
-                token: message.client.config.insideToken,
                 color
             })
-        }).then(res => res.json());
+        }).then(res => res.json()).catch(() => {});
 
-        if(data?.error ?? !data)
-            return msg.edit({ content: 'API PixelBattle недоступно в данный момент, регенерация холста не возможна' });
+        if(data?.error ?? !data) {
+            if(data?.reason === 'NotEnoughPrivileges') return msg.edit({
+                content: 'Судя по всему, в кэше API Pixel Battle вы не являетесь модератором или выше\n'
+                    + codeBlock('json', JSON.stringify(data))
+            });
+
+            return msg.edit({
+                content: 'API PixelBattle недоступно в данный момент, регенерация холста не возможна\n'
+                    + codeBlock('json', JSON.stringify(data || null))
+            });
+        }
 
         return msg.edit({ content: `Холст ${data.canvas.width}x${data.canvas.height} был успешно очищен! Как его цвет был установлен - \`${color}\`` });
     }
