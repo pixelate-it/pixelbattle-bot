@@ -78,7 +78,7 @@ class TokenCommand extends PixelCommand {
                     content: null,
                     embeds: [
                         new EmbedBuilder()
-                        .setTitle(`🦜 | Информация о выдаче ${action ? 'бана' : 'разбана'}`)
+                        .setTitle(`🦜 Информация о выдаче ${action ? 'бана' : 'разбана'}`)
                         .setColor(0x5865F2)
                         .setDescription(
                             `> Модератор: \`${message.author.globalName || message.author.username} (${message.author.id})\`\n` +
