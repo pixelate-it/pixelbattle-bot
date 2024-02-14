@@ -32,7 +32,7 @@ class AntiNewAccountService {
                             .setLabel('Забанить')
                             .setStyle(ButtonStyle.Danger)
                             .setEmoji('⚠️')
-                            .setCustomId(`ban_acc_${(await this.client.database.collection('users').findOne({ userID: member.id }))._id}`)
+                            .setCustomId(`ban_acc_${(await this.client.database.collection('users').findOne({ userID: member.id }))?._id ?? member.id}`)
                     ])
             ]
         });
