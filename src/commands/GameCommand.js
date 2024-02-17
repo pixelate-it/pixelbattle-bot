@@ -39,6 +39,8 @@ class GameCommand extends PixelCommand {
             }
 
             const ended = (args[0] !== 'start');
+            const msg = await message.reply({ content: 'Смена игрового статуса в процессе...' });
+
             const request = await fetch(`${message.client.config.api_domain}/game/change`, {
                 method: 'POST',
                 headers: {
@@ -53,7 +55,7 @@ class GameCommand extends PixelCommand {
 
             if(request?.error ?? !request) return message.reply({ content: request ? codeBlock('json', JSON.stringify(request)) : 'От API поступил пустой ответ, возможно, стоит проверить его состояние' });
 
-            return message.reply({ content: `Игра была успешно ${ended ? 'завершена' : 'запущена'}` });
+            return msg.edit({ content: `Игра была успешно ${ended ? 'завершена' : 'запущена'}` });
         } else {
             const cooldown = Number(args[0]);
             if(cooldown <= 0)
