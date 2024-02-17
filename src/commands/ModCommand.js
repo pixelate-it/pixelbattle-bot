@@ -32,7 +32,7 @@ class ModeratorCommand extends PixelCommand {
                 Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                     { userID: message.author.id },
                     { projection: { _id: 0, token: 1 } }
-                )).token
+                ))?.token
             },
             body: JSON.stringify({
                 action
