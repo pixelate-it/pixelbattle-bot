@@ -10,8 +10,8 @@ class GameCommand extends PixelCommand {
     }
 
     async run(message, args) {
-        if(!message.client.config.admin.has(message.author.id))
-            return message.reply({ content: 'Вы не являетесь создателем проекта/специальным модератором, доступ к команде ограничен' });
+        if(!message.client.permissions.admin.has(message.author.id))
+            return message.reply({ content: 'Вы не являетесь администратором, доступ к команде ограничен' });
 
         if(isNaN(Number(args[0]))) {
             if(!(['start', 'stop'].includes(args[0]))) {

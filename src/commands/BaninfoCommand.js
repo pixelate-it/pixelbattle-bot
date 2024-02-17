@@ -35,7 +35,7 @@ class BaninfoCommand extends PixelCommand {
                 .setColor(0x5865F2)
                 .setDescription(
                     `> Модератор: \`${moderator?.globalName || moderator?.username || ban.moderatorID} ${moderator ? `(${ban.moderatorID})` : ''}\`\n` +
-                    `> Забанил: \`${user.globalName || user.username} (${ban.userID})\`\n` +
+                    `> Забанил: \`${user.globalName || user.username} (${user.id})\`\n` +
                     `> По причине: \`${ban.reason || 'не указана'}\`\n` +
                     `> Бан истекает: <t:${Math.floor(ban.timeout / 1000)}:R>`
                 )
