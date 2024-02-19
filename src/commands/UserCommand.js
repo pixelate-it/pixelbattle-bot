@@ -31,7 +31,7 @@ class UserCommand extends PixelCommand {
 
     async run(message, args) {
         const member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-        if(member.bot) return message.reply({ content: 'Невозможно просмотреть информацию о боте' });
+        if(member.user.bot) return message.reply({ content: 'Невозможно просмотреть информацию о боте' });
 
         const msg = await message.reply({ content: 'Производится сбор данных о игроке...' });
 
