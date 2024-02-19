@@ -1,7 +1,6 @@
 const PixelListener = require('../../structures/PixelListener');
 const fetch = require("node-fetch");
-const { EmbedBuilder, codeBlock } = require('discord.js');
-const { ObjectId } = require('mongodb');
+const { EmbedBuilder, codeBlock, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 
 class InteractionCreateListener extends PixelListener {
     constructor() {
@@ -24,11 +23,11 @@ class InteractionCreateListener extends PixelListener {
 
         await interaction.deferReply({ ephemeral: true });
 
-        const _id = new ObjectId(interaction.customId.slice(8));
-        const user = await client.database.collection('users').findOne({ _id });
+        const userID = interaction.customId.slice(8);
+        const user = await client.database.collection('users').findOne({ userID }, { hint: { userID: 1 } });
 
         if(!user)
-            return interaction.editReply('Игрок отсутствует в базе данных PixelBattle').catch(() => {});
+            return interaction.editReply('Игрок ещё не авторизовался в PixelBattle').catch(() => {});
         if(user.banned)
             return interaction.editReply('Игрок уже забанен').catch(() => {});
 
@@ -43,7 +42,7 @@ class InteractionCreateListener extends PixelListener {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + (await client.database.collection('users').findOne(
                     { userID: interaction.user.id },
-                    { projection: { _id: 0, token: 1 } }
+                    { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                 ))?.token
             },
             body: JSON.stringify(ban_data)
@@ -52,7 +51,7 @@ class InteractionCreateListener extends PixelListener {
             return interaction.editReply('Попытка бана прошла неудачно\n' + response ? codeBlock('json', JSON.stringify(response)) : '');
 
         await client.database.collection('users').updateOne(
-            { _id },
+            { userID },
             {
                 $set: {
                     banned: {
@@ -60,7 +59,8 @@ class InteractionCreateListener extends PixelListener {
                         ...ban_data
                     }
                 }
-            }
+            },
+            { hint: { userID: 1 } }
         );
 
         interaction.message.edit({
@@ -74,6 +74,13 @@ class InteractionCreateListener extends PixelListener {
                             value:
                                 `> Игрок был заблокирован (MOD: \`${interaction.user.id}\`)`
                         }
+                    ])
+            ],
+            components: [
+                new ActionRowBuilder()
+                    .addComponents([
+                        new ButtonBuilder(interaction.message.components[0].components[0].data)
+                            .setDisabled(true)
                     ])
             ]
         }).catch(() => {});

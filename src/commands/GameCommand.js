@@ -47,13 +47,13 @@ class GameCommand extends PixelCommand {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                         { userID: message.author.id },
-                        { projection: { _id: 0, token: 1 } }
+                        { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                     ))?.token
                 },
                 body: JSON.stringify({ ended })
             }).then(res => res?.json()).catch(() => {});
 
-            if(request?.error ?? !request) return message.reply({ content: request ? codeBlock('json', JSON.stringify(request)) : 'От API поступил пустой ответ, возможно, стоит проверить его состояние' });
+            if(request?.error ?? !request) return msg.edit({ content: request ? codeBlock('json', JSON.stringify(request)) : 'От API поступил пустой ответ, возможно, стоит проверить его состояние' });
 
             return msg.edit({ content: `Игра была успешно ${ended ? 'завершена' : 'запущена'}` });
         } else {
@@ -69,7 +69,7 @@ class GameCommand extends PixelCommand {
                     'Content-Type': 'application/json',
                     Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                         { userID: message.author.id },
-                        { projection: { _id: 0, token: 1 } }
+                        { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                     ))?.token
                 },
                 body: JSON.stringify({ cooldown })

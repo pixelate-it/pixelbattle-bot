@@ -31,7 +31,7 @@ class ModeratorCommand extends PixelCommand {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                     { userID: message.author.id },
-                    { projection: { _id: 0, token: 1 } }
+                    { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                 ))?.token
             },
             body: JSON.stringify({
@@ -56,7 +56,7 @@ class ModeratorCommand extends PixelCommand {
             .updateOne(
                 { userID: user },
                 { $set: { role: Number(action) } },
-                { upsert: true }
+                { upsert: true, hint: { userID: 1 } }
             );
 
         message.guild.members.cache.get(user).roles[action ? 'add' : 'remove']('969950074874515476').catch(() => {});

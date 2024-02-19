@@ -15,7 +15,7 @@ class TagCommand extends PixelCommand {
             return message.reply({ content: 'Укажите тег, участников которого хотите посмотреть' });
 
         const data = await message.client.database.collection('users')
-            .find({ tag })
+            .find({ tag }, { hint: { userID: 1 } })
             .toArray();
         if(data.length <= 0) 
             return message.reply({ content: `Игроков, использующих тег \`${tag}\` не найдено!` });

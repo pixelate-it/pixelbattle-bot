@@ -36,7 +36,7 @@ class UserCommand extends PixelCommand {
         const msg = await message.reply({ content: 'Производится сбор данных о игроке...' });
 
         const information = await message.client.database.collection('users')
-            .findOne({ userID: member.id }, { projection: { _id: 0, token: 1, tag: 1, points: 1, badges: 1, banned: 1 } });
+            .findOne({ userID: member.id }, { projection: { _id: 0, token: 1, tag: 1, points: 1, badges: 1, banned: 1 }, hint: { userID: 1 } });
 
         return msg.edit({
             content: null,

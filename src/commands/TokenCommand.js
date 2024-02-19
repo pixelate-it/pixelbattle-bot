@@ -1,6 +1,6 @@
 const PixelCommand = require('../structures/PixelCommand');
 //const BansManager = require('../managers/BansManager');
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, codeBlock} = require('discord.js');
 const { ms } = require('../utils/PixelFunctions');
 const fetch = require('node-fetch');
 
@@ -44,25 +44,25 @@ class TokenCommand extends PixelCommand {
 
                 const msg = await message.reply({ content: 'Производятся записи в базе данных и API Pixel Battle...' });
 
-                fetch(`${message.client.config.api_domain}/users/${user.id}/${args[0]}`, {
+                const request = await fetch(`${message.client.config.api_domain}/users/${user.id}/${args[0]}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                             { userID: message.author.id },
-                            { projection: { _id: 0, token: 1 } }
+                            { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                         ))?.token
                     },
                     body: JSON.stringify({
                         timeout,
                         reason
                     })
-                });
+                }).then(res => res.json()).catch(() => {});
 
-                await message.client.database.collection('users').updateOne(
-                    {
-                        userID: user.id
-                    },
+                if(request?.error ?? !request) return msg.reply({ content: request ? `Произошла ошибка при бане игрока\n${codeBlock('json', JSON.stringify(request))}` : 'От API поступил пустой ответ, возможно, стоит проверить его состояние' });
+
+                message.client.database.collection('users').updateOne(
+                    { userID: user.id },
                     {
                         $set: {
                             banned: action ? {
@@ -71,7 +71,8 @@ class TokenCommand extends PixelCommand {
                                 reason
                             } : null
                         }
-                    }
+                    },
+                    { hint: { userID: 1 } }
                 )
 
                 msg.edit({
@@ -118,7 +119,8 @@ class TokenCommand extends PixelCommand {
                         $set: {
                             token: message.client.functions.generateToken(parseInt(data.token.split('.')[2], 36)),
                         }
-                    }
+                    },
+                    { hint: { userID: 1 } }
                 );
 
                 message.reply({ content: `Токен игрока ${`${user.globalName ?? user.username ?? user.tag} (**${user.id}**)`} был успешно перегенерирован!` });
