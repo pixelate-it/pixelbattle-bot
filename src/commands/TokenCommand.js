@@ -61,20 +61,6 @@ class TokenCommand extends PixelCommand {
 
                 if(request?.error ?? !request) return msg.reply({ content: request ? `Произошла ошибка при бане игрока\n${codeBlock('json', JSON.stringify(request))}` : 'От API поступил пустой ответ, возможно, стоит проверить его состояние' });
 
-                message.client.database.collection('users').updateOne(
-                    { userID: user.id },
-                    {
-                        $set: {
-                            banned: action ? {
-                                moderatorID: message.author.id,
-                                timeout,
-                                reason
-                            } : null
-                        }
-                    },
-                    { hint: { userID: 1 } }
-                )
-
                 msg.edit({
                     content: null,
                     embeds: [
