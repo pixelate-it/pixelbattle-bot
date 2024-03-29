@@ -6,7 +6,7 @@ class BanRemoverService {
     }
 
     clear(id) {
-        return this.client.database.collection('users').updateOne({ userID: id }, { $set: { banned: null } });
+        return this.client.database.collection('users').updateOne({ userID: id }, { $set: { banned: null } }, { hint: { userID: 1 } });
     }
 
     runClearance(checkInterval = 15000) {

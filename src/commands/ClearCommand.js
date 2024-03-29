@@ -26,7 +26,7 @@ class ClearCommand extends PixelCommand {
                 'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + (await message.client.database.collection('users').findOne(
                     { userID: message.author.id },
-                    { projection: { _id: 0, token: 1 } }
+                    { projection: { _id: 0, token: 1 }, hint: { userID: 1 } }
                 ))?.token
             },
             body: JSON.stringify({

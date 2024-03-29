@@ -7,8 +7,9 @@ class PointsHelper {
         return this.client.database.collection('users').updateOne({ userID }, {
             $inc: {
                 points: changing
-            }
-        });
+            },
+
+        }, { hint: { userID: 1 } });
     }
 }
 

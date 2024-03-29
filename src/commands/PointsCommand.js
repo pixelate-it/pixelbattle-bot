@@ -35,7 +35,7 @@ class PointsCommand extends PixelCommand {
             case 'leaders':
             case 'leader': {
                 const msg = await message.reply({ content: 'Идёт построение таблицы лидеров...' });
-                let users = await message.client.database.collection('users').find({}, { userID: 1, points: 1 }).toArray();
+                let users = await message.client.database.collection('users').find({}, { projection: { userID: 1, points: 1 }, hint: { userID: 1 } }).toArray();
                 users = users.filter(u => u.points !== 0);
 
                 let i = 1;
@@ -58,7 +58,7 @@ class PointsCommand extends PixelCommand {
 
             default: {
                 const target = message.mentions.members?.first() || message.guild.members.cache.get(args[0]) || message.member;
-                const data = await message.client.database.collection('users').findOne({ userID: target.id });
+                const data = await message.client.database.collection('users').findOne({ userID: target.id }, { hint: { userID: 1 } });
 
                 message.reply({
                     embeds: [
