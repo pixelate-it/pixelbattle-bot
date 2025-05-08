@@ -83,7 +83,7 @@ class TokenCommand extends PixelCommand {
                         )
                         .setTimestamp()
                     ]
-                }).catch();
+                }).catch(() => {});
 
                 break;
             }

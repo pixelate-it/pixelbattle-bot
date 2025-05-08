@@ -22,7 +22,7 @@ class CommandExecutorService {
         const command = await this.findCommand(cmd);
 
         if(cooldown.has(this.message.author.id) && cooldown.get(this.message.author.id) === command?.name) 
-            return this.message.react('⏱️').catch();
+            return this.message.react('⏱️').catch(() => {});
 
         if(command) {
             try {

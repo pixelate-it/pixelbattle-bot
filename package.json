@@ -11,7 +11,7 @@
   "author": "mirdukkkkk",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "discord.js": "^14.14.1",
+    "discord.js": "^14.18.0",
     "mongodb": "^6.2.0",
     "node-fetch": "2.7.0",
     "uuid": "^9.0.1"
