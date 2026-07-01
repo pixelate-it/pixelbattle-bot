@@ -1,23 +1,26 @@
 {
-  "name": "pixelbattle-bot",
-  "version": "4.0.0 (Fractal Budgie)",
-  "description": "",
-  "main": "./src/index.js",
-  "scripts": {
-    "prod": "node .",
-    "dev": "nodemon ."
-  },
-  "keywords": [],
-  "author": "mirdukkkkk",
-  "license": "GPL-3.0-only",
-  "dependencies": {
-    "discord.js": "^14.18.0",
-    "mongodb": "^6.2.0",
-    "node-fetch": "2.7.0",
-    "uuid": "^9.0.1"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.1",
-    "nodemon": "^3.0.3"
-  }
+    "name": "pixelbattle-bot",
+    "version": "26.7.1",
+    "main": "src/index.ts",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc && tsup",
+        "start": "node dist/index.js"
+    },
+    "repository": "https://github.com/pixelate-it/pixelbattle-bot.git",
+    "author": "mirdukkkkk <karmulav@gmail.com>",
+    "license": "GPL-3.0-only",
+    "private": false,
+    "dependencies": {
+        "discord.js": "^14.26.4",
+        "dotenv": "^17.4.2"
+    },
+    "devDependencies": {
+        "@types/node": "^26.0.1",
+        "prettier": "^3.9.4",
+        "tsc-alias": "^1.8.17",
+        "tsup": "^8.5.1",
+        "tsx": "^4.22.4",
+        "typescript": "^6.0.3"
+    }
 }
