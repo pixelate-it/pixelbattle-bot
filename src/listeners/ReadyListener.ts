@@ -1,6 +1,7 @@
 import { config } from "@config";
 import { PixelClient } from "@structures/PixelClient";
 import { PixelListener } from "@structures/PixelListener";
+import { setupIdeasForum } from "@helpers/ideasSetup";
 import { ActivityType } from "discord.js";
 
 interface Info {
@@ -38,11 +39,15 @@ export class ReadyListener extends PixelListener<"clientReady"> {
             const status = await buildOnline();
             client.user?.setPresence({
                 status: "idle",
-                activities: [{ name: status, type: ActivityType.Watching }]
+                activities: [{ name: status, type: ActivityType.Watching }],
             });
         };
         await presence();
         setInterval(presence, 30000);
+
+        await setupIdeasForum(client).catch((error) =>
+            console.error("* [IDEAS] Setup failed:", error),
+        );
 
         console.log("* [ROOT] Bot started");
     }

@@ -9,7 +9,7 @@ export abstract class PixelListener<K extends keyof ClientEvents> {
     constructor(
         public readonly name: string,
         public readonly event: K,
-        public readonly once: boolean = false
+        public readonly once: boolean = false,
     ) {}
 
     public abstract run(

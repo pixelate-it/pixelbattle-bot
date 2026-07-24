@@ -4,21 +4,14 @@
   "singleQuote": false,
   "quoteProps": "as-needed",
   "jsxSingleQuote": false,
-  "trailingComma": "none",
+  "trailingComma": "all",
   "bracketSpacing": true,
   "bracketSameLine": false,
   "arrowParens": "always",
   "useTabs": false,
   "overrides": [
     {
-      "files": "*.yaml",
-      "options": {
-        "tabWidth": 2,
-        "useTabs": false
-      }
-    },
-    {
-      "files": "*.yml",
+      "files": ["*.yaml", "*.yml"],
       "options": {
         "tabWidth": 2,
         "useTabs": false

@@ -4,3 +4,8 @@
 /.vscode
 /.idea
 .env
+
+# SQLite idea index
+*.db
+*.db-shm
+*.db-wal

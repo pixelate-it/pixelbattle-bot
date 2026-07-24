@@ -27,7 +27,10 @@
 
         "paths": {
             "@helpers": ["./src/helpers"],
+            "@helpers/*": ["./src/helpers/*"],
+            "@database/*": ["./src/database/*"],
             "@listeners": ["./src/listeners"],
+            "@buttons": ["./src/buttons"],
             "@structures/*": ["./src/structures/*"],
 
             "@config": ["./src/config"]

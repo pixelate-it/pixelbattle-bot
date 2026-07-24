@@ -1,4 +1,4 @@
-FROM node:24-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 
 COPY package.json yarn.lock tsup.config.ts ./
@@ -6,7 +6,7 @@ RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn build
 
-FROM node:24-alpine
+FROM node:26-alpine
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
